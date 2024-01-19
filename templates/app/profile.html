@@ -1,0 +1,41 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Profile{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+  {% with truncated_username=request.user.username|slice:":6" %}
+      <h3 class="text-secondary fs-6">
+        Welcome {{ truncated_username }}{% if request.user.username|length > 6 %}...{% endif %}
+      </h3>
+    {% endwith %}
+  <div class="col-sm-2 border-end">
+   <ul class="list-unstyled">
+    <li class="d-grid"><a href="{% url 'profile' %}" class="btn {{active}}">Profile</a></li>
+    <li class="d-grid"><a href="{% url 'address' %}" class="btn">Address</a></li>
+   </ul>
+  </div>
+  <div class="col-sm-8 offset-sm-1">
+    
+    <form action="" method="post" novalidate class="shadow p-5">
+      {% csrf_token %}
+      <h4 class="mt-0 pt-0 text-success fs-5">Add New Address</h4><br>
+      {% for fm in form %}
+      
+      <div class="form-group col-lg-6 mb-3">
+         {{fm.label_tag}} {{fm}}
+         <small class="text-danger">{{fm.errors|striptags}}</small>
+      </div>
+      {% endfor %}
+
+      <input type="submit" value="Save to Address Book" class="btn btn-success mt-4">
+      {% if form.non_field_errors %}
+         {% for errors in form.non_field_errors %}
+         <p class="alert alert-danger my-3">{{errors}}</p>
+         {% endfor %}
+      {% endif %}
+      </form>
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

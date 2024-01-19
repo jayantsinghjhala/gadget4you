@@ -1,0 +1,47 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}Product Detail{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+  <div class="col-sm-6 text-center align-self-center">
+   <img src="{{product.product_image.url}}" alt="" class="img-fluid img-thumbnail">
+  </div>
+  <div class="col-sm-5 offset-sm-1">
+   <h5>{{product.title|capfirst}}</h5>
+   <hr>
+   <h4>{{product.discounted_price|format_indian}} 
+     <small class="fw-light text-decoration-line-through fs-6">{{product.selling_price|format_indian}}</small>
+     <span class="text-success fw-bold fs-6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ product.selling_price|calculate_discount_percentage:product.discounted_price }} off</span>
+     </h4> <br>
+   {% comment %} <p>Description: <br> {{product.description}}</p> <br> {% endcomment %}
+   <p>Description: <br>{{ product.description|replace_dash_with_br|safe }}</p>
+ 
+   <form action="/add-to-cart/" method="POST" class="d-inline">
+    {%csrf_token%}
+    <input type="hidden" name="product_id" value="{{ product.id }}" id="product_id">
+    {%if in_cart == 0 %}
+    <button type="submit" class="btn btn-primary shadow px-5 py-2">Add to Cart</button>
+    {%elif in_cart == 1%}
+    <button type="submit" class="btn btn-warning shadow px-5 py-2">Go to Cart</button>
+    {%endif%}
+  </form>
+
+  <form action="/buy_now/" method="POST" class="d-inline">
+    {%csrf_token%}
+    <input type="hidden" name="product_id" value="{{ product.id }}" id="product_id_b">
+    <button type="submit" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</button>
+  </form>
+   {% comment %} <a href="{% url 'buy_now' %}" class="btn btn-danger shadow px-5 py-2 ms-4">Buy Now</a> {% endcomment %}
+   <h5 class="mt-5">Available Offers</h5>
+   <ul>
+    <li>Bank Offer 5% Unlimited Cashback on Flipkart Axis Bank Credit</li>
+    <li>Special Price Get extra 3000 off (price inclusive of discount)</li>
+    <li>No cost EMI 1,667/month. Standard EMI also available</li>
+    <li>Partner Offer 2000 Flipkart Gift Card on Every 1000th Transaction with a new Visa Debit/Credit Card</li>
+   </ul>
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

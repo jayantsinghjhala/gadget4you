@@ -1,0 +1,97 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}
+  Cart
+{% endblock %}
+{% block main-content %}
+<div class="container my-5">
+  <div class="row">
+    <h1 class="text-center mb-5 text-secondary">SHOPPING CART</h1>
+    <div class="col-sm-8 cart_products">
+      {% comment %} <h3 class="text-success">Cart</h3> {% endcomment %}
+      {% if products %}
+        {% for cart_item in products %}
+          <div class="card mb-2 shadow-sm cart_product">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3 text-center align-self-center">
+                  <img src="{{ cart_item.product.product_image.url }}" alt="{{ cart_item.product.title }}" class="img-fluid img-thumbnail shadow-sm" height="150" width="150" />
+                </div>
+                <div class="col-sm-9">
+                  <div>
+                    <h5>{{ cart_item.product.title }}</h5>
+                    <p class="mb-2 text-muted small">
+                      {% if cart_item.product.description|wordcount >= 30 %}
+                          {{ cart_item.product.description|truncatewords:30 }} 
+                      {% else %}
+                          {{ cart_item.product.description }}
+                      {% endif %}
+                    </p>
+                    <div class="my-3 quantity_block">
+                      <label for="quantity">Quantity:</label>
+                      <button class="minus-cart btn" cid="{{ cart_item.id }}" style="outline: none;border: none;"><i class="fas fa-minus-square fa-lg"></i></button>
+                      <span class="quantity">{{ cart_item.quantity }}</span>
+                      <button class="plus-cart btn" cid="{{ cart_item.id }}" style="outline: none;border: none;"><i class="fas fa-plus-square fa-lg"></i></button>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <button cid="{{ cart_item.id }}" class="btn btn-sm btn-secondary mr-3 remove_cart">Remove item</button>
+                      {% comment %} <a href="{% url 'delete_cart' cart_item.id %}" onclick="return confirm('Are you want to Remove this item from Cart?')" class="btn btn-sm btn-secondary mr-3">Remove item</a> {% endcomment %}
+                      <p class="mb-0">
+                        <span><strong>{{ cart_item.product.discounted_price|format_indian }}</strong></span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-12 text-center mt-5 pt-5 empty_msg">
+          <p class="text-muted">
+            No Products found in the Cart. <a class="fw-bold text-success text-decoration-none" href="{% url 'home' %}">Continue Shopping</a>
+          </p>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="col-sm-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3>Total Cart Value</h3>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+              Amount<span id="amount">{{ amount|format_indian }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              Shipping<span id="total_shipping">{{ total_shipping|format_indian }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+              <div>
+                <strong>Total</strong> <small>(including VAT)</small>
+              </div>
+              <span><strong id="total_amount">{{ total_amount|format_indian }}</strong></span>
+            </li>
+          </ul>
+          <div class="d-grid">
+            <a href="{% url 'checkout' 'cart' %}" class="btn btn-success place_order_btn {% if products|length == 0 %}d-none{%endif%}">Place Order</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="mb-4">We accept</h5>
+          <img src="{% static 'app/images/payment.png' %}" alt="" class="img-fluid" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock main-content %}

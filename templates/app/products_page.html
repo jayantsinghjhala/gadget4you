@@ -1,0 +1,89 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}
+  {% if category == 'M' %}
+    Mobiles
+  {% elif category == 'MA' %}
+    Mobile Accessories
+  {% elif category == 'L' %}
+    Laptops
+  {% elif category == 'SW' %}
+    Smart Wearables
+  {% else %}
+    Products
+  {% endif %}
+{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+  <div class="col-sm-3">
+   <span class="text-secondary fw-bold fs-6">Brand Filter</span>
+   <!-- Hover added -->
+   <div class="list-group">
+     {% for brand in brands %}
+     <a href="{% url 'productdata' category=category data=brand.brand %}" class="list-group-item list-group-item-action" aria-current="true">{{brand.brand|capfirst}}</a>
+     {% endfor %}
+     <a href="{% url 'product' category=category %}" class="list-group-item list-group-item-action text-danger fw-bold" aria-current="true">Remove Filter</a>
+   </div>
+  </div>
+  <div class="col-sm-8 offset-sm-1">
+   <h4 class="mb-4 text-success fw-bold">{% if category == 'M' %}
+    Mobiles
+  {% elif category == 'MA' %}
+    Mobile Accessories
+  {% elif category == 'L' %}
+    Laptops
+  {% elif category == 'SW' %}
+    Smart Wearables
+  {% else %}
+    Products
+  {% endif %}</h4>
+   {% for product in products %}
+     <div class="row mb-4">
+       <div class="col-md-12">
+         <a href="{% url 'product-detail' product.id %}" class="card py-2 product-card text-decoration-none" id="productCard{{ product.id }}">
+           <div class="row g-0">
+             <div class="col-md-4 image-wrapper">
+               <img src="{{ product.product_image.url }}" class="card-img" alt="{{ product.brand }} - {{ product.model }}">
+             </div>
+             <div class="col-md-8">
+               <div class="card-body">
+                 <h5 class="card-title" id="productTitle{{ product.id }}">{{ product.title }}</h5>
+                 <h4 class="text-dark">{{ product.discounted_price|format_indian }} 
+                    <small class="fw-light text-dark text-decoration-line-through fs-6">{{ product.selling_price|format_indian }}</small>
+                    <span class="text-success fw-bold fs-6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ product.selling_price|calculate_discount_percentage:product.discounted_price }} off</span>
+                 </h4> <br>
+                 {% comment %} <p>Description: <br>{{ product.description|replace_dash_with_br|safe }}</p> {% endcomment %}
+               </div>
+             </div>
+           </div>
+         </a>
+       </div>
+     </div>
+   {% endfor %}
+  </div>
+ </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+    $('.product-card').mouseenter(function() {
+      $(this).css({
+        'border': '4px solid #6666FF',
+        'border-radius': '5px',
+      });
+      $(this).find('.card-title').css('color', '#6666FF');
+    }).mouseleave(function() {
+      $(this).css({
+        'border': '1px solid #dee2e6',  /* Adjust this to your desired default border color */
+        'border-radius': '5px',
+      });
+      $(this).find('.card-title').css('color', 'black');
+    });
+  });
+</script>
+
+{% endblock main-content %}

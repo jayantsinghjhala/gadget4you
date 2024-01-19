@@ -1,0 +1,51 @@
+.owl-carousel .item{
+ /* border: 1px solid black; */
+ font-size: 24px;
+ text-align: center;
+ margin-top: 20px;;
+}
+/* CSS to create a square-shaped container */
+.image-wrapper {
+     width: 200px; /* Define the square size here */
+     height: 200px; /* Same size as width to create a square */
+     overflow: hidden; /* Hide overflow to maintain the square shape */
+     position: relative; /* Positioning context for image */
+}
+.image-wrapper2 {
+     width: 200px; /* Define the square size here */
+     height: 170px; /* Same size as width to create a square */
+     overflow: hidden; /* Hide overflow to maintain the square shape */
+     position: relative; /* Positioning context for image */
+}
+/* Ensure the image fits within the square without distorting */
+/* .image-wrapper img {
+     width: 50%;
+     height: auto; 
+     display: block; 
+} */
+.image-wrapper2 img {
+     max-width: 100%; /* Set maximum width relative to the container */
+     height: auto; /* Maintain aspect ratio */
+     display: block; /* Remove any extra space around the image */
+     margin: auto; /* Center the image horizontally */
+   }
+.image-wrapper img {
+     max-width: 70%; /* Set maximum width relative to the container */
+     height: auto; /* Maintain aspect ratio */
+     display: block; /* Remove any extra space around the image */
+     margin: auto; /* Center the image horizontally */
+   }
+.owl-next{
+ float:right;
+}
+.owl-prev{
+ float:left;
+}
+.owl-prev span{
+ font-size: 24px;
+ font-weight: bold;
+}
+.owl-next span{
+ font-size: 24px;
+ font-weight: bold;
+}
